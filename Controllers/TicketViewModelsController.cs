@@ -10,53 +10,22 @@ using MvcMovie.Models;
 
 namespace MvcMovie.Controllers
 {
-    public class MoviesController : Controller
+    public class TicketViewModelsController : Controller
     {
         private readonly MvcMovieContext _context;
 
-        public MoviesController(MvcMovieContext context)
+        public TicketViewModelsController(MvcMovieContext context)
         {
             _context = context;
         }
 
-        [HttpPost]
-        public string Index(string searchString, bool notUsed)
+        // GET: TicketViewModels
+        public async Task<IActionResult> Index()
         {
-            return "From [HttpPost]Index: filter on " + searchString;
+            return View(await _context.TicketViewModel.ToListAsync());
         }
 
-
-        // GET: Movies
-        public async Task<IActionResult> Index(string movieGenre, string searchString)
-        {
-            // Use LINQ to get list of genres.
-            IQueryable<string> genreQuery = from m in _context.Movie
-                                            orderby m.Genre
-                                            select m.Genre;
-
-            var movies = from m in _context.Movie
-                         select m;
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                movies = movies.Where(s => s.Title.Contains(searchString));
-            }
-
-            if (!string.IsNullOrEmpty(movieGenre))
-            {
-                movies = movies.Where(x => x.Genre == movieGenre);
-            }
-
-            var movieGenreVM = new MovieGenreViewModel
-            {
-                Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
-                Movies = await movies.ToListAsync()
-            };
-
-            return View(movieGenreVM);
-        }
-
-        // GET: Movies/Details/5
+        // GET: TicketViewModels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -64,39 +33,39 @@ namespace MvcMovie.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movie
+            var ticketViewModel = await _context.TicketViewModel
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            if (ticketViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(ticketViewModel);
         }
 
-        // GET: Movies/Create
+        // GET: TicketViewModels/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Movies/Create
+        // POST: TicketViewModels/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price,Rating")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,MovieId")] TicketViewModel ticketViewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(movie);
+                _context.Add(ticketViewModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(movie);
+            return View(ticketViewModel);
         }
 
-        // GET: Movies/Edit/5
+        // GET: TicketViewModels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -104,22 +73,24 @@ namespace MvcMovie.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movie.FindAsync(id);
-            if (movie == null)
+            var ticketViewModel = await _context.TicketViewModel.FindAsync(id);
+            if (ticketViewModel == null)
             {
                 return NotFound();
             }
-            return View(movie);
+
+
+            return View(ticketViewModel);
         }
 
-        // POST: Movies/Edit/5
+        // POST: TicketViewModels/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price,Rating")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,MovieId")] TicketViewModel ticketViewModel)
         {
-            if (id != movie.Id)
+            if (id != ticketViewModel.Id)
             {
                 return NotFound();
             }
@@ -128,12 +99,12 @@ namespace MvcMovie.Controllers
             {
                 try
                 {
-                    _context.Update(movie);
+                    _context.Update(ticketViewModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.Id))
+                    if (!TicketViewModelExists(ticketViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -144,10 +115,10 @@ namespace MvcMovie.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(movie);
+            return View(ticketViewModel);
         }
 
-        // GET: Movies/Delete/5
+        // GET: TicketViewModels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -155,30 +126,30 @@ namespace MvcMovie.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movie
+            var ticketViewModel = await _context.TicketViewModel
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            if (ticketViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(ticketViewModel);
         }
 
-        // POST: Movies/Delete/5
+        // POST: TicketViewModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _context.Movie.FindAsync(id);
-            _context.Movie.Remove(movie);
+            var ticketViewModel = await _context.TicketViewModel.FindAsync(id);
+            _context.TicketViewModel.Remove(ticketViewModel);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(int id)
+        private bool TicketViewModelExists(int id)
         {
-            return _context.Movie.Any(e => e.Id == id);
+            return _context.TicketViewModel.Any(e => e.Id == id);
         }
     }
 }
