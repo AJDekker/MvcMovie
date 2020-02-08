@@ -22,7 +22,7 @@ namespace MvcMovie.Controllers
         // GET: Tickets
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TicketViewModel.ToListAsync());
+            return View(await _context.Ticket.ToListAsync());
         }
 
         // GET: Tickets/Details/5
@@ -33,7 +33,7 @@ namespace MvcMovie.Controllers
                 return NotFound();
             }
 
-            var ticket = await _context.TicketViewModel
+            var ticket = await _context.Ticket
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ticket == null)
             {
@@ -68,16 +68,25 @@ namespace MvcMovie.Controllers
         // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
+            // Use LINQ to get list of genres.
+            IQueryable<string> movieQuery = from m in _context.Movie
+                                            orderby m.Title
+                                            select m.Title;
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var ticket = await _context.TicketViewModel.FindAsync(id);
+            var ticket = await _context.Ticket.FindAsync(id);
             if (ticket == null)
             {
                 return NotFound();
             }
+
+            ticket.Movies = new SelectList(await movieQuery.Distinct().ToListAsync());
+
             return View(ticket);
         }
 
@@ -124,7 +133,7 @@ namespace MvcMovie.Controllers
                 return NotFound();
             }
 
-            var ticket = await _context.TicketViewModel
+            var ticket = await _context.Ticket
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ticket == null)
             {
@@ -139,15 +148,15 @@ namespace MvcMovie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ticket = await _context.TicketViewModel.FindAsync(id);
-            _context.TicketViewModel.Remove(ticket);
+            var ticket = await _context.Ticket.FindAsync(id);
+            _context.Ticket.Remove(ticket);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TicketExists(int id)
         {
-            return _context.TicketViewModel.Any(e => e.Id == id);
+            return _context.Ticket.Any(e => e.Id == id);
         }
     }
 }

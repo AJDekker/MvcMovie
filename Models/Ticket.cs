@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,6 +17,10 @@ namespace MvcMovie.Models
         public string Description { get; set; }
 
         public double Price { get; set; }
+
+        public SelectList Movies { get; set; }
+
+        public string Movie { get; set; }
 
         public int MovieId { get; set; }
         

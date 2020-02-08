@@ -59,7 +59,7 @@ namespace MvcMovie.Models
                 );
                 context.SaveChanges();
 
-                context.TicketViewModel.AddRange(
+                context.Ticket.AddRange(
                     new Ticket
                     {
                         Name = "First Ticket",

@@ -12,7 +12,7 @@ namespace MvcMovie.Data
 
         public DbSet<Movie> Movie { get; set; }
 
-        public DbSet<Ticket> TicketViewModel {get; set;}
+        public DbSet<Ticket> Ticket {get; set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
