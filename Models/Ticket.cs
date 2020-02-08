@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MvcMovie.Models
 {
-    public class TicketViewModel
+    public class Ticket
     {
         public int Id { get; set; }
 

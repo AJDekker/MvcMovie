@@ -12,12 +12,12 @@ namespace MvcMovie.Data
 
         public DbSet<Movie> Movie { get; set; }
 
-        public DbSet<TicketViewModel> TicketViewModel {get; set;}
+        public DbSet<Ticket> TicketViewModel {get; set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Movie>().ToTable("Movie");
-            modelBuilder.Entity<TicketViewModel>().ToTable("Ticket");
+            modelBuilder.Entity<Ticket>().ToTable("Ticket");
         }
     }
 }

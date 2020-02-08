@@ -60,7 +60,7 @@ namespace MvcMovie.Models
                 context.SaveChanges();
 
                 context.TicketViewModel.AddRange(
-                    new TicketViewModel
+                    new Ticket
                     {
                         Name = "First Ticket",
                         Description = "Description",
