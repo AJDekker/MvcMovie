@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using MvcMovie.Data;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace MvcMovie
 {
     public class Startup
