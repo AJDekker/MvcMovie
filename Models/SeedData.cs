@@ -58,3 +58,5 @@ namespace MvcMovie.Models
         }
     }
 }
+
+//https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/working-with-sql?view=aspnetcore-3.1&tabs=visual-studio
